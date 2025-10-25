@@ -6,7 +6,7 @@ It also includes a **command-line interface (CLI)**, **offline stub mode** for d
 
 ---
 
-## 🚀 Project Overview
+## Project Overview
 
 The application provides a **local and API-based system** for automatically generating and running test cases for arbitrary Python functions or classes.  
 
@@ -20,13 +20,13 @@ The project is built with **FastAPI**, **Pydantic**, **pytest**, and **Mistral S
 
 ---
 
-## 🧩 Core Features
+## Core Features
 
-### 🧠 AI Test Generation
+### AI Test Generation
 - Uses the `mistralai` SDK (or stub mode) to generate pytest tests from Python source code.
 - Automatically detects the first function/class name (`symbol`) from the provided file.
 
-### ⚙️ FastAPI Backend
+### FastAPI Backend
 - Exposes clean REST endpoints:
   - `GET /health` – Health check with model and run status  
   - `POST /bundle/generate-and-save` – Generates and saves test files  
@@ -34,7 +34,7 @@ The project is built with **FastAPI**, **Pydantic**, **pytest**, and **Mistral S
   - `POST /tests/generate.txt` – Returns generated test code as text (no file writes)
 - Built with **Pydantic models** for input/output validation.
 
-### 🧪 Command-Line Interface (CLI)
+### Command-Line Interface (CLI)
 - Interacts with backend logic directly — no web server needed.
 - Commands:
   ```bash
