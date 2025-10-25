@@ -26,8 +26,6 @@ A production‑ready Python template that wraps the **Mistral AI SDK** behind a 
 - **CLI tool** that mirrors the HTTP API for quick local runs and scripting.
 - **Automated test generation** (optional) that writes tests into `tests/generated/`.
 - **Coverage integration** via `coverage.py` with HTML and terminal reports.
-- **Pluggable backends**: easily switch between **non‑embedding** and **embedding** endpoints.
-- **Typed codebase** with friendly errors; Apple‑Silicon/macOS development flow supported.
 - **Reproducible builds** via `requirements.txt` and a small `Makefile` with common tasks.
 - **Toggle cleanup flags** in generation utilities to control whether intermediate files are kept.
 
@@ -144,7 +142,7 @@ GEN_CLEANUP=true
 
 ## Running the API
 
-Start the server (development, with auto-reload):
+Start the server:
 ```bash
 uvicorn main:app --reload --host ${APP_HOST:-0.0.0.0} --port ${APP_PORT:-8000}
 ```
@@ -203,10 +201,6 @@ This suite exercises the **running FastAPI server** (or the app via `TestClient`
 
 **Run just the API tests**:
 ```bash
-# If test_api.py uses a live server, start it in another terminal:
-make run  # or uvicorn main:app --reload
-
-# Then run the API-focused tests:
 pytest -q tests/test_api.py
 ```
 
@@ -215,10 +209,35 @@ We use **pytest** and **coverage.py**. Generated tests are written to `tests/gen
 Run all tests with coverage:
 ```bash
 make coverage
-# or:
-coverage run -m pytest -q
-coverage report -m
-coverage html  # writes htmlcov/index.html
+```
+
+Run all tests:
+```bash
+make test
+```
+
+Run all tests with coverage:
+```bash
+make coverage
+```
+
+API integration tests only:
+```bash
+make api-test
+```
+
+Generate tests with the CLI:
+```bash
+# Single test file (optionally pass a spec):
+make gen                
+
+# Per-symbol output with cleanup:
+make gen-clean          
+```
+
+Run the latest test file
+```bash
+make run                
 ```
 
 ---
