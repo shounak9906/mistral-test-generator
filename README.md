@@ -14,7 +14,6 @@ A production‑ready Python template that wraps the **Mistral AI SDK** behind a 
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Running the API](#running-the-api)
-- [Using the CLI](#using-the-cli)
 - [Testing & Coverage](#testing--coverage)
 - [Makefile Commands](#makefile-commands)
 - [Troubleshooting](#troubleshooting)
@@ -189,26 +188,6 @@ uvicorn main:app --reload --host ${APP_HOST:-0.0.0.0} --port ${APP_PORT:-8000}
     }
     ```
 
-
----
-
-## Using the CLI
-
-The CLI mirrors the API and is handy for local testing or shell scripts.
-
-```bash
-# Basic prompt (uses MODEL_NAME unless overridden)
-python cli.py prompt "Explain Chernoff bounds in one line"
-
-# Choose a model and max tokens
-python cli.py prompt "Summarize Weierstrass theorem" --model mistral-small-latest --max-tokens 128
-
-# Embeddings (if implemented)
-python cli.py embed "first sentence" "second sentence" --model mistral-embed
-
-# Batch from a file (one prompt per line)
-python cli.py batch prompts.txt --out outputs.txt
-```
 
 ---
 
