@@ -1,75 +1,6 @@
-<!-- # 🧠 LLM-Powered Test Generator  
-### *FastAPI + Mistral SDK + CLI + Full Testing Suite*
-
-This project is a **Python + FastAPI application** that integrates with the **Mistral AI SDK** to automatically generate and execute **unit tests** for Python code.  
-It also includes a **command-line interface (CLI)**, **offline stub mode** for deterministic testing, a **sandboxed execution environment**, and **extensive test coverage** to demonstrate engineering best practices.
-
----
-
-## Project Overview
-
-The application provides a **local and API-based system** for automatically generating and running test cases for arbitrary Python functions or classes.  
-
-Using the **Mistral SDK**, it analyzes user-provided code, infers the symbol (function/class name), and produces corresponding `pytest` test files.  
-
-It supports two main usage modes:
-1. **Single-file mode** → all tests go into one file (`test_generated.py`)
-2. **Per-symbol mode** → separate test files per detected function/class (`test_<symbol>.py`)
-
-The project is built with **FastAPI**, **Pydantic**, **pytest**, and **Mistral SDK** — wrapped in a developer-friendly **Makefile** and **CLI** for instant usability.
-
----
-
-## Core Features
-
-### AI Test Generation
-- Uses the `mistralai` SDK (or stub mode) to generate pytest tests from Python source code.
-- Automatically detects the first function/class name (`symbol`) from the provided file.
-
-### FastAPI Backend
-- Exposes clean REST endpoints:
-  - `GET /health` – Health check with model and run status  
-  - `POST /bundle/generate-and-save` – Generates and saves test files  
-  - `POST /bundle/generate-run` – Safely executes tests in sandbox (if enabled)
-  - `POST /tests/generate.txt` – Returns generated test code as text (no file writes)
-- Built with **Pydantic models** for input/output validation.
-
-### Command-Line Interface (CLI)
-- Interacts with backend logic directly — no web server needed.
-- Commands:
-  ```bash
-  python cli.py generate under_test.py --spec "Compute x**y"
-  python cli.py run --enable
-
-### Flags
-
- - `--cleanup` → per-symbol mode (cleans older tests)
-
- - `--spec` → natural-language description of function behavior
-
- - `--enable` → explicit permission to run tests (safety guard)
-
-### Makefile automation
-  ```bash
-  make gen                 # Generate tests (single mode)
-  make gen-clean           # Generate tests (per-symbol mode)
-  make run                 # Run latest generated tests safely
-  make api-test            # Run FastAPI backend tests
-  make coverage            # Generate coverage report
-  make clean               # Remove caches and coverage data
-
-
-### Sandbox Execution
-
-Generated tests run in a temporary directory to isolate side effects.
-
-Controlled by _run_enabled() — execution allowed only if ENABLE_RUN=1.
- -->
-
-
 # Project: Mistral SDK App — FastAPI + CLI + Tests
 
-A production‑ready Python template that wraps the **Mistral AI SDK** behind a small **FastAPI** service and a convenient **CLI**, with **pytest**-based test generation and **coverage** reporting. It’s designed to be simple to run locally (macOS/Apple Silicon friendly), easy to extend, and safe to ship.
+A production‑ready Python template that wraps the **Mistral AI SDK** behind a small **FastAPI** service and a convenient **CLI**, with **pytest**-based test generation and **coverage** reporting. It’s designed to be simple to run locally, easy to extend, and safe to ship.
 
 > This README is self‑contained: follow it from top to bottom to **download**, **set up**, **run**, and **test** the project.
 
@@ -99,8 +30,6 @@ A production‑ready Python template that wraps the **Mistral AI SDK** behind a 
 - **Typed codebase** with friendly errors; Apple‑Silicon/macOS development flow supported.
 - **Reproducible builds** via `requirements.txt` and a small `Makefile` with common tasks.
 - **Toggle cleanup flags** in generation utilities to control whether intermediate files are kept.
-
-> You can start just with HTTP + CLI; embeddings and generators are optional modules you can disable/ignore if not needed.
 
 ---
 
@@ -290,12 +219,6 @@ pytest -q tests/test_api.py
 pytest -q -k test_api
 ```
 
-**Notes**
-- If the tests instantiate `TestClient(main.app)`, you **don’t** need the server running separately.
-- Export `MISTRAL_API_KEY` before running to avoid auth errors.
-- You can mark slow or network‑touching tests and filter with `-m "not slow"` if markers are defined.
-
-
 We use **pytest** and **coverage.py**. Generated tests are written to `tests/generated/` so you can inspect and keep them.
 
 Run all tests with coverage:
@@ -317,8 +240,6 @@ Generate new tests (if your project includes a generator):
 make gen
 # or whatever command you configured for test generation
 ```
-
-> If a generated test is flaky, keep it in `tests/generated/` but mark with `@pytest.mark.flaky(reruns=2)` or adjust the seed.
 
 ---
 
