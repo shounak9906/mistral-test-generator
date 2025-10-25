@@ -422,7 +422,3 @@ JSON
 """
 coverage run -m pytest -q && coverage report -m
 """
-
-# test_api.py is getting deleted sometimes? check if it is even being used since coverage runs even when it is deleted
-# check what is wrong with coverage and figure out how coverage works
-# add more features like ease of input/output

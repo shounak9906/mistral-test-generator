@@ -149,23 +149,49 @@ uvicorn main:app --reload --host ${APP_HOST:-0.0.0.0} --port ${APP_PORT:-8000}
 
 ### Available Endpoints (default examples)
 
-- `GET /health` — liveness probe.
-- `POST /generate` — text generation.
-  - Body: `{ "prompt": "Your prompt", "model": "mistral-small-latest", "max_tokens": 256 }`
-- `POST /embed` — text embeddings (optional).
-  - Body: `{ "texts": ["foo", "bar"], "model": "mistral-embed" }`
+### Available Endpoints (project-specific)
+
+- `GET /health` — liveness & model info.  
+  Returns: `{"ok": true, "model": "<MISTRAL_MODEL>", "fallback": "<MISTRAL_FALLBACK_MODEL>"}`
+
+- `POST /bundle/generate-and-save` — generate pytest tests **and save** to disk.  
+  Body (`BundleRequest`): `{"code": str, "spec": str, "size": "mini|std|max", "style_hints": [str], "module_path": "under_test.py", "symbol": str|null, "tests_mode": "per_symbol|single", "cleanup_old": true}`  
+  Returns (`BundleResponse`): `{"code_path": str, "tests_path": str, "symbol": str, "rationale": str}`
+
+- `POST /bundle/generate-and-run` — generate tests **and run** them (returns pytest output).  
+  Body: same as `BundleRequest`  
+  Returns: `{"exit_code": int, "stdout": str, "stderr": str}`
+
+- `POST /tests/generate.txt` — return the generated pytest file as **plain text**.  
+  Body (`GenerateTextRequest`): `{"code": str, "spec": str, "size": "mini|std|max", "style_hints": [str], "symbol": str|null}`
+
 
 **Example curl calls**
 
 ```bash
-# Health
-curl -s http://localhost:8000/health | jq
-
-# Generate text
-curl -s -X POST http://localhost:8000/generate   -H "Content-Type: application/json"   -d '{"prompt":"Say hello","max_tokens":64}' | jq
-
-# Embeddings (if enabled)
-curl -s -X POST http://localhost:8000/embed   -H "Content-Type: application/json"   -d '{"texts":["A","B"]}' | jq
+- `POST /bundle/generate-and-save` — generate pytest tests **and save them to disk**.
+  - Body (`BundleRequest`):
+    ```json
+    {
+      "code": "str",
+      "spec": "str",
+      "size": "mini|std|max",
+      "style_hints": ["str", "..."],
+      "module_path": "under_test.py",
+      "symbol": "str or null",
+      "tests_mode": "per_symbol|single",
+      "cleanup_old": true
+    }
+    ```
+  - Returns (`BundleResponse`):
+    ```json
+    {
+      "code_path": "str",
+      "tests_path": "str",
+      "symbol": "str",
+      "rationale": "str"
+    }
+    ```
 ```
 
 ---
