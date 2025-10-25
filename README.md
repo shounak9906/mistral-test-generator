@@ -40,3 +40,11 @@ The project is built with **FastAPI**, **Pydantic**, **pytest**, and **Mistral S
   ```bash
   python cli.py generate under_test.py --spec "Compute x**y"
   python cli.py run --enable
+
+### Flags
+
+ - `--cleanup` → per-symbol mode (cleans older tests)
+
+ - `--spec` → natural-language description of function behavior
+
+ - `--enable` → explicit permission to run tests (safety guard)
