@@ -88,8 +88,6 @@ A production‑ready Python template that wraps the **Mistral AI SDK** behind a 
 - [Makefile Commands](#makefile-commands)
 - [Development Tips](#development-tips)
 - [Troubleshooting](#troubleshooting)
-- [FAQ](#faq)
-
 ---
 
 ## Features
@@ -358,21 +356,5 @@ make help  # if you added a help target
 
 **Port already in use**
 - Change `APP_PORT` or stop the other process: `lsof -nP -iTCP:8000 | grep LISTEN`.
-
----
-
-## FAQ
-
-**Q: Do I need embeddings?**  
-A: No. The app runs fine with pure text generation. Keep `/embed` and `cli embed` only if you need vector features.
-
-**Q: Where do auto‑generated tests go?**  
-A: Into `tests/generated/`. Commit the useful ones and delete noisy cases; you can toggle cleanup via `GEN_CLEANUP` env var.
-
-**Q: Can I switch models?**  
-A: Yes—use the `MODEL_NAME` env var for defaults and `--model` flags in CLI/API calls per request.
-
-**Q: How do I run on a different port?**  
-A: `APP_PORT=9000 make run`.
 
 ---
