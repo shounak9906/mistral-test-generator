@@ -52,14 +52,12 @@ def _parse_json_from_model(raw_content) -> dict:
     else:
         text = str(raw_content)
 
-    # strip code fences and leading junk (e.g., smart quotes)
     text = text.strip()
     if text.startswith("```"):
         text = re.sub(r"^```(?:json)?\s*", "", text, flags=re.IGNORECASE)
         text = re.sub(r"\s*```$", "", text)
     text = _clean_to_first_json(text)
 
-    # strict parse; if it fails, try first {...}
     try:
         return json.loads(text)
     except json.JSONDecodeError:
@@ -73,7 +71,7 @@ def _parse_json_from_model(raw_content) -> dict:
 
 def _call_with_retries(model, **kwargs):
     delay = 2.0
-    for _ in range(6):  # ~2+4+8+16+30s max
+    for _ in range(6):  
         try:
             return client.chat.complete(model=model, **kwargs)
         except MistralAPIException as e:
@@ -89,11 +87,9 @@ def _chat(messages):
     try:
         return _call_with_retries(MODEL, messages=messages, temperature=0, max_tokens=1200)
     except HTTPException:
-        # Fallback model one-shot
         return _call_with_retries(FALLBACK_MODEL, messages=messages, temperature=0, max_tokens=1200)
     
 def _clean_to_first_json(text: str) -> str:
-    # remove BOM / leading junk before the first '{'
     text = text.lstrip("\ufeff")
     m = re.search(r"\{", text)
     return text[m.start():] if m else text
@@ -114,7 +110,6 @@ def _gen_tests_text(symbol: str, spec: str) -> str:
     Otherwise, call the real model through _chat(...) with RAW_* prompts.
     """
     if os.getenv("STUB_GEN") == "1":
-        # Minimal, fast, always-passing test body
         return (
             f"from under_test import {symbol}\n"
             "import pytest\n\n"
@@ -123,7 +118,6 @@ def _gen_tests_text(symbol: str, spec: str) -> str:
             f"    assert {symbol}(a, b) == expected\n"
         )
 
-    # --- real path (unchanged) ---
     sysmsg = RAW_SYSTEM.format(symbol=symbol)
     usrmsg = RAW_USER.format(symbol=symbol, spec=spec.strip())
     res = _chat([{"role": "system", "content": sysmsg},
@@ -135,10 +129,8 @@ def _gen_tests_text(symbol: str, spec: str) -> str:
     return _extract_between(text, "<<<PYTEST_START>>>", "<<<PYTEST_END>>>")
 
 def _ensure_import_line(tests_py: str, symbol: str) -> str:
-    # If "from under_test import ..." already exists, keep as is.
     if "from under_test import " in tests_py:
         return tests_py
-    # Prepend the import at the very top.
     return f"from under_test import {symbol}\n" + tests_py
 
 def _run_enabled() -> bool:
@@ -153,7 +145,6 @@ def run_bundle_tests(code_path: str = "under_test.py", tests_path: str = None):
     from pathlib import Path
 
     if not tests_path:
-        # auto-detect the latest test file under tests/generated/
         gen_dir = Path("tests/generated")
         candidates = sorted(gen_dir.glob("test_*.py"), key=lambda p: p.stat().st_mtime, reverse=True)
         if not candidates:
@@ -165,7 +156,6 @@ def run_bundle_tests(code_path: str = "under_test.py", tests_path: str = None):
         os.makedirs(os.path.join(td, "tests"), exist_ok=True)
         shutil.copy(tests_path, os.path.join(td, "tests", os.path.basename(tests_path)))
 
-        # minimal conftest to ensure imports work
         Path(os.path.join(td, "tests", "conftest.py")).write_text(
             "import sys, pathlib\nROOT = pathlib.Path(__file__).resolve().parents[1]\n"
             "sys.path.insert(0, str(ROOT))\n",
@@ -281,17 +271,14 @@ def health():
 
 @app.post("/bundle/generate-and-save", response_model=BundleResponse)
 def generate_and_save_bundle(req: BundleRequest):
-    # 1) Save code
     code_path = Path(req.module_path)
     code_path.parent.mkdir(parents=True, exist_ok=True)
     code_path.write_text(req.code, encoding="utf-8")
 
-    # 2) Resolve symbol
     symbol = req.symbol or detect_symbol_name(req.code)
     if not symbol:
         raise HTTPException(status_code=400, detail="Could not detect a top-level function/class name. Provide 'symbol'.")
 
-    # 3) Generate raw pytest text (marker-based) and ensure import line
     tests_py = _gen_tests_text(symbol, req.spec)
     tests_py = _ensure_import_line(tests_py, symbol)
 
@@ -302,7 +289,7 @@ def generate_and_save_bundle(req: BundleRequest):
     if req.tests_mode == "per_symbol":
         tests_path = gen_dir / f"test_{symbol}.py"
         if req.cleanup_old:
-            for p in gen_dir.glob("test_*.py"):  # <-- cleanup ONLY in generated/
+            for p in gen_dir.glob("test_*.py"): 
                 if p.name != tests_path.name:
                     try:
                         p.unlink()
@@ -311,7 +298,6 @@ def generate_and_save_bundle(req: BundleRequest):
     else:
         tests_path = gen_dir / "test_generated.py"
 
-    # ensure tests/conftest.py exists (at tests/, not in generated/)
     conftest = tests_root / "conftest.py"
     if not conftest.exists():
         conftest.write_text(
@@ -322,7 +308,6 @@ def generate_and_save_bundle(req: BundleRequest):
             encoding="utf-8",
         )
 
-    # 6) Write the test file (once)
     tests_path.write_text(tests_py, encoding="utf-8")
 
     return BundleResponse(
@@ -337,17 +322,13 @@ def generate_and_run(req: BundleRequest):
     if not _run_enabled():
         raise HTTPException(403, "Test execution disabled. Set ENABLE_RUN=1 to enable.")
 
-    # 1) Generate & save (reusing your existing logic)
     resp = generate_and_save_bundle(req)
 
-    # 2) Run pytest safely in a temp dir
     with tempfile.TemporaryDirectory() as td:
-        # copy only what we need
         shutil.copy(resp.code_path, os.path.join(td, "under_test.py"))
         os.makedirs(os.path.join(td, "tests"), exist_ok=True)
         shutil.copy(resp.tests_path, os.path.join(td, "tests", os.path.basename(resp.tests_path)))
 
-        # lightweight conftest to ensure import path
         Path(os.path.join(td, "tests", "conftest.py")).write_text(
             "import sys, pathlib\nROOT = pathlib.Path(__file__).resolve().parents[1]\n"
             "sys.path.insert(0, str(ROOT))\n",
@@ -361,7 +342,7 @@ def generate_and_run(req: BundleRequest):
                 cwd=td,
                 capture_output=True,
                 text=True,
-                timeout=10,  # seconds
+                timeout=10,  
                 env={**os.environ, "PYTHONPATH": td},
             )
         except subprocess.TimeoutExpired:
@@ -372,23 +353,19 @@ def generate_and_run(req: BundleRequest):
         "tests_path": resp.tests_path,
         "symbol": resp.symbol,
         "exit_code": run.returncode,
-        "stdout": run.stdout[-4000:],  # cap output
+        "stdout": run.stdout[-4000:],  
         "stderr": run.stderr[-4000:],
     }
 
 @app.post("/tests/generate.txt", response_class=PlainTextResponse)
 def generate_tests_text(req: GenerateTextRequest):
-    # 1) make the code importable as under_test.py at repo root
     symbol = req.symbol or detect_symbol_name(req.code) or "target"
     Path("under_test.py").write_text(req.code, encoding="utf-8")
 
-    # 2) get raw pytest text via markers (no JSON parsing)
     tests_py = _gen_tests_text(symbol, req.spec)
 
-    # 3) ensure the import line is present
     tests_py = _ensure_import_line(tests_py, symbol)
-
-    # 4) return plain text (no escaping)
+    
     return tests_py
 
 """

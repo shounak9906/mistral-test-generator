@@ -1,9 +1,7 @@
-# Variables
 PYTHON := python
 TEST_DIR := tests
 SRC := main.py under_test.py
 
-# Default target
 .PHONY: help
 help:
 	@echo "Available targets:"
@@ -27,7 +25,7 @@ coverage:
 	coverage run -m pytest -q $(TEST_DIR)
 	coverage report -m 
 
-# Generate an HTML coverage report (opens in browser)
+# Generate an HTML coverage report
 .PHONY: htmlcov
 htmlcov:
 	coverage run -m pytest -q $(TEST_DIR)
