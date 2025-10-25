@@ -86,7 +86,6 @@ A production‑ready Python template that wraps the **Mistral AI SDK** behind a 
 - [Using the CLI](#using-the-cli)
 - [Testing & Coverage](#testing--coverage)
 - [Makefile Commands](#makefile-commands)
-- [Development Tips](#development-tips)
 - [Troubleshooting](#troubleshooting)
 ---
 
@@ -332,29 +331,13 @@ make help  # if you added a help target
 
 ---
 
-## Development Tips
-
-- **Type hints**: add `pyright` or `mypy` if you want stricter checks.
-- **Formatting**: black + ruff are easy wins for style and lint.
-- **Seeds**: make deterministic tests by seeding any random generators.
-- **API contracts**: define Pydantic models for request/response; version your routes (`/v1/...`) when you add breaking changes.
-- **Apple Silicon**: prefer native `arm64` wheels; if a lib fails to build, try `pip install --only-binary :all:` for that package or use Rosetta as a fallback.
-
----
-
 ## Troubleshooting
 
 **`MISTRAL_API_KEY` not set**
 - Ensure it’s exported in your shell *before* starting `uvicorn` or running the CLI.
 - On macOS, Terminal sessions don’t share env with GUI apps; export in shell profile or use a `.env` loader.
 
-**Linker / duplicate symbol errors (C++ labs)**
-- If you also compile C++ in the same workspace, ensure single definition for utility functions (e.g., a global `error()` function should live in **one** `.cpp` or be `static inline` in a header).
-
 **Python version issues**
 - Verify `python --version` is ≥ 3.10. On macOS, prefer `python3` from Homebrew.
-
-**Port already in use**
-- Change `APP_PORT` or stop the other process: `lsof -nP -iTCP:8000 | grep LISTEN`.
 
 ---
