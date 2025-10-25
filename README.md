@@ -147,8 +147,6 @@ Start the server:
 uvicorn main:app --reload --host ${APP_HOST:-0.0.0.0} --port ${APP_PORT:-8000}
 ```
 
-### Available Endpoints (default examples)
-
 ### Available Endpoints (project-specific)
 
 - `GET /health` — liveness & model info.  
@@ -168,22 +166,23 @@ uvicorn main:app --reload --host ${APP_HOST:-0.0.0.0} --port ${APP_PORT:-8000}
 
 **Example curl calls**
 
-```bash
-- `POST /bundle/generate-and-save` — generate pytest tests **and save them to disk**.
-  - Body (`BundleRequest`):
-    ```json
-    {
-      "code": "str",
-      "spec": "str",
-      "size": "mini|std|max",
-      "style_hints": ["str", "..."],
-      "module_path": "under_test.py",
-      "symbol": "str or null",
-      "tests_mode": "per_symbol|single",
-      "cleanup_old": true
-    }
-    ```
-  - Returns (`BundleResponse`):
+- `POST /bundle/generate-and-save` — generate pytest tests **and save them to disk**.  
+  **Body** (`BundleRequest`):
+  
+  ```json
+  {
+    "code": "str",
+    "spec": "str",
+    "size": "mini|std|max",
+    "style_hints": ["str", "..."],
+    "module_path": "under_test.py",
+    "symbol": "str or null",
+    "tests_mode": "per_symbol|single",
+    "cleanup_old": true
+  }
+
+
+- Returns (`BundleResponse`):
     ```json
     {
       "code_path": "str",
@@ -192,7 +191,7 @@ uvicorn main:app --reload --host ${APP_HOST:-0.0.0.0} --port ${APP_PORT:-8000}
       "rationale": "str"
     }
     ```
-```
+
 
 ---
 
