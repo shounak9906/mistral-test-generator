@@ -1,0 +1,7 @@
+fastapi
+uvicorn[standard]
+mistralai
+python-dotenv
+pydantic
+coverage
+pytest-cov
