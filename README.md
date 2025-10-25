@@ -246,7 +246,6 @@ make run
 
 **`MISTRAL_API_KEY` not set**
 - Ensure it’s exported in your shell *before* starting `uvicorn` or running the CLI.
-- On macOS, Terminal sessions don’t share env with GUI apps; export in shell profile or use a `.env` loader.
 
 **Python version issues**
 - Verify `python --version` is ≥ 3.10. On macOS, prefer `python3` from Homebrew.
