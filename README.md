@@ -180,6 +180,7 @@ uvicorn main:app --reload --host ${APP_HOST:-0.0.0.0} --port ${APP_PORT:-8000}
     "tests_mode": "per_symbol|single",
     "cleanup_old": true
   }
+  ```
 
 
 - Returns (`BundleResponse`):
