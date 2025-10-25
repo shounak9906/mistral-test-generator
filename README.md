@@ -10,7 +10,7 @@ A production‑ready Python template that wraps the **Mistral AI SDK** behind a 
 - [Features](#features)
 - [Repository Layout](#repository-layout)
 - [Requirements](#requirements)
-- [Quickstart (copy–paste)](#quickstart-copy–paste)
+- [Quickstart](#quickstart)
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Running the API](#running-the-api)
@@ -61,11 +61,11 @@ Optional but recommended:
 
 ---
 
-## Quickstart (copy–paste)
+## Quickstart
 
 ```bash
 # 1) Clone or download the project
-git clone <YOUR_REPO_URL> mistral-sdk-app && cd mistral-sdk-app
+git clone https://github.com/shounak9906/mistral-test-generator mistral-sdk-app && cd mistral-sdk-app
 
 # 2) Create & activate a virtual environment
 python3 -m venv .venv
@@ -81,11 +81,7 @@ export MISTRAL_API_KEY="sk-...your-key..."
 # 5) Run the API (dev)
 uvicorn main:app --reload --host ${APP_HOST:-0.0.0.0} --port ${APP_PORT:-8000}
 
-# 6) In another terminal, try the CLI
-source .venv/bin/activate
-python cli.py prompt "Hello from CLI"
-
-# 7) Run the test suite with coverage
+# 6) Run the test suite with coverage
 make coverage
 # open htmlcov/index.html for the detailed report
 ```
