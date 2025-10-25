@@ -14,6 +14,7 @@ A production‑ready Python template that wraps the **Mistral AI SDK** behind a 
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Running the API](#running-the-api)
+- [Using the CLI](#using-the-cli)
 - [Testing & Coverage](#testing--coverage)
 - [Makefile Commands](#makefile-commands)
 - [Troubleshooting](#troubleshooting)
@@ -187,6 +188,20 @@ uvicorn main:app --reload --host ${APP_HOST:-0.0.0.0} --port ${APP_PORT:-8000}
       "rationale": "str"
     }
     ```
+
+
+---
+
+## Using the CLI
+
+# Generate tests (single file)
+python cli.py generate under_test.py --spec "Only ints/floats; use pytest.approx for floats."
+
+# Per-symbol with cleanup
+python cli.py generate under_test.py --spec "…" --cleanup
+
+# Run the latest generated test bundle
+python cli.py run --enable
 
 
 ---
