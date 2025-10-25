@@ -121,10 +121,11 @@ The application reads configuration from **environment variables** (or a `.env` 
 
 | Variable | Required | Default | Description |
 |---|---|---|---|
-| `MISTRAL_API_KEY` | ✅ | — | Your Mistral API key used by the SDK. |
-| `MODEL_NAME` | ❌ | `mistral-small-latest` | Default text generation model. |
-| `EMBED_MODEL` | ❌ | `mistral-embed` | Default embeddings model (if embeddings enabled). |
-| `GEN_CLEANUP` | ❌ | `true` | If `false`, keep intermediate artifacts for debugging. |
+| `MISTRAL_API_KEY` | ✅ | — | Required unless STUB_GEN=1  |
+| `MISTRAL_MODEL` | ❌ | `mistral-small-latest` | Primary model. |
+| `MISTRAL_FALLBACK_MODEL` | ❌ | `mistral-medium-latest` | Fallback model. |
+| `STUB_GEN` | ❌ | `0` | If "1", run in stub mode (no external API calls). |
+| `ENABLE_RUN` | ❌ | `0` | If "1", allow /bundle/generate-and-run to execute. |
 
 Create a `.env` (optional):
 ```env
