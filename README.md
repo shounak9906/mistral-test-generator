@@ -242,37 +242,6 @@ make run
 
 ---
 
-## Makefile Commands
-
-Common developer commands (adjust if your Makefile differs):
-
-```Makefile
-# ---- Makefile (excerpt) ----
-run:               ## Start FastAPI (dev)
-    uvicorn main:app --reload --host $${APP_HOST:-0.0.0.0} --port $${APP_PORT:-8000}
-
-test:              ## Run tests (pytest)
-    pytest -q
-
-coverage:          ## Test coverage (terminal + HTML)
-    coverage run -m pytest -q
-    coverage report -m
-    coverage html
-
-gen:               ## Generate tests into tests/generated/
-    python -m tools.generate_tests --out tests/generated --cleanup $${GEN_CLEANUP:-true}
-
-clean:             ## Remove caches and artifacts
-    rm -rf __pycache__ .pytest_cache .mypy_cache htmlcov dist build
-```
-
-List help:
-```bash
-make help  # if you added a help target
-```
-
----
-
 ## Troubleshooting
 
 **`MISTRAL_API_KEY` not set**
