@@ -114,12 +114,11 @@ A production‑ready Python template that wraps the **Mistral AI SDK** behind a 
 ├─ requirements.txt       # Python dependencies
 ├─ Makefile               # Developer commands (run, test, coverage, gen, clean)
 ├─ tests/
-│  ├─ test_unit_*.py      # Handwritten unit tests
+│  ├─ test_api.py         
+|  ├─ conftest.py
 │  └─ generated/          # Auto-generated tests land here
 └─ README.md              # You are here
 ```
-
-> If your project evolved, keep these filenames; otherwise adjust the paths in the Makefile commands below.
 
 ---
 
