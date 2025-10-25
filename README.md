@@ -81,7 +81,7 @@ pip install -r requirements.txt
 export MISTRAL_API_KEY="sk-...your-key..."
 
 # 5) Run the API (dev)
-make run    # or: uvicorn main:app --reload --port 8000
+uvicorn main:app --reload --host ${APP_HOST:-0.0.0.0} --port ${APP_PORT:-8000}
 
 # 6) In another terminal, try the CLI
 source .venv/bin/activate
@@ -128,8 +128,6 @@ The application reads configuration from **environment variables** (or a `.env` 
 | Variable | Required | Default | Description |
 |---|---|---|---|
 | `MISTRAL_API_KEY` | ✅ | — | Your Mistral API key used by the SDK. |
-| `APP_HOST` | ❌ | `0.0.0.0` | Bind address for uvicorn. |
-| `APP_PORT` | ❌ | `8000` | Port for the FastAPI server. |
 | `MODEL_NAME` | ❌ | `mistral-small-latest` | Default text generation model. |
 | `EMBED_MODEL` | ❌ | `mistral-embed` | Default embeddings model (if embeddings enabled). |
 | `GEN_CLEANUP` | ❌ | `true` | If `false`, keep intermediate artifacts for debugging. |
@@ -140,17 +138,14 @@ MISTRAL_API_KEY=sk-...
 MODEL_NAME=mistral-small-latest
 EMBED_MODEL=mistral-embed
 GEN_CLEANUP=true
-APP_PORT=8000
 ```
 
 ---
 
 ## Running the API
 
-Start the server (development, with auto‑reload):
+Start the server (development, with auto-reload):
 ```bash
-make run
-# equivalent:
 uvicorn main:app --reload --host ${APP_HOST:-0.0.0.0} --port ${APP_PORT:-8000}
 ```
 
@@ -195,8 +190,6 @@ python cli.py embed "first sentence" "second sentence" --model mistral-embed
 python cli.py batch prompts.txt --out outputs.txt
 ```
 
-> Tip: add `alias mistral="python $(pwd)/cli.py"` to your shell profile to call `mistral prompt "..."`.
-
 ---
 
 ## Testing & Coverage
@@ -215,8 +208,6 @@ make run  # or uvicorn main:app --reload
 
 # Then run the API-focused tests:
 pytest -q tests/test_api.py
-# or
-pytest -q -k test_api
 ```
 
 We use **pytest** and **coverage.py**. Generated tests are written to `tests/generated/` so you can inspect and keep them.
@@ -228,17 +219,6 @@ make coverage
 coverage run -m pytest -q
 coverage report -m
 coverage html  # writes htmlcov/index.html
-```
-
-Run a subset of tests:
-```bash
-pytest -k "under_test and not slow" -q
-```
-
-Generate new tests (if your project includes a generator):
-```bash
-make gen
-# or whatever command you configured for test generation
 ```
 
 ---
