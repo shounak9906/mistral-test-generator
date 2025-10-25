@@ -376,7 +376,3 @@ A: Yes—use the `MODEL_NAME` env var for defaults and `--model` flags in CLI/AP
 A: `APP_PORT=9000 make run`.
 
 ---
-
-## License
-
-Choose a license and add a `LICENSE` file (MIT/Apache‑2.0/BSD‑3‑Clause are common).
