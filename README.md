@@ -114,8 +114,7 @@ A production‑ready Python template that wraps the **Mistral AI SDK** behind a 
 ├─ requirements.txt       # Python dependencies
 ├─ Makefile               # Developer commands (run, test, coverage, gen, clean)
 ├─ tests/
-│  ├─ test_api.py         
-|  ├─ conftest.py
+│  ├─ test_api.py         # Integration tests for the FastAPI endpoints (/health, /generate, /embed)
 │  └─ generated/          # Auto-generated tests land here
 └─ README.md              # You are here
 ```
@@ -272,6 +271,30 @@ python cli.py batch prompts.txt --out outputs.txt
 ---
 
 ## Testing & Coverage
+
+### API Integration Tests (`tests/test_api.py`)
+
+This suite exercises the **running FastAPI server** (or the app via `TestClient`) and covers endpoints like:
+- `GET /health`
+- `POST /generate`
+- `POST /embed` (if enabled)
+
+**Run just the API tests**:
+```bash
+# If test_api.py uses a live server, start it in another terminal:
+make run  # or uvicorn main:app --reload
+
+# Then run the API-focused tests:
+pytest -q tests/test_api.py
+# or
+pytest -q -k test_api
+```
+
+**Notes**
+- If the tests instantiate `TestClient(main.app)`, you **don’t** need the server running separately.
+- Export `MISTRAL_API_KEY` before running to avoid auth errors.
+- You can mark slow or network‑touching tests and filter with `-m "not slow"` if markers are defined.
+
 
 We use **pytest** and **coverage.py**. Generated tests are written to `tests/generated/` so you can inspect and keep them.
 
