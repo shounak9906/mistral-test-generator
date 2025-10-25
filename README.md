@@ -41,7 +41,7 @@ A production‑ready Python template that wraps the **Mistral AI SDK** behind a 
 ├─ requirements.txt       # Python dependencies
 ├─ Makefile               # Developer commands (run, test, coverage, gen, clean)
 ├─ tests/
-│  ├─ test_api.py         # Integration tests for the FastAPI endpoints (/health, /generate, /embed)
+│  ├─ test_api.py         # Integration tests for the FastAPI endpoints
 │  └─ generated/          # Auto-generated tests land here
 └─ README.md              # You are here
 ```
@@ -218,8 +218,8 @@ python cli.py batch prompts.txt --out outputs.txt
 
 This suite exercises the **running FastAPI server** (or the app via `TestClient`) and covers endpoints like:
 - `GET /health`
-- `POST /generate`
-- `POST /embed` (if enabled)
+- `POST /generate-and-save`
+- `POST /-generate-and-save`
 
 **Run just the API tests**:
 ```bash
