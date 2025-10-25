@@ -92,8 +92,8 @@ make coverage
 
 1. **Clone** the repository:
    ```bash
-   git clone <YOUR_REPO_URL> mistral-sdk-app
-   cd mistral-sdk-app
+   git clone https://github.com/shounak9906/mistral-test-generator.git
+   cd mistral-test-generator
    ```
 
 2. **Create a virtual environment** (macOS/Linux):
