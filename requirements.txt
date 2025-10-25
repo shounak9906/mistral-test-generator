@@ -4,4 +4,4 @@ mistralai
 python-dotenv
 pydantic
 coverage
-pytest-cov
+pytest
