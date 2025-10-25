@@ -48,3 +48,13 @@ The project is built with **FastAPI**, **Pydantic**, **pytest**, and **Mistral S
  - `--spec` → natural-language description of function behavior
 
  - `--enable` → explicit permission to run tests (safety guard)
+
+### Makefile automation
+ ```bash
+  make gen                 # Generate tests (single mode)
+  make gen-clean           # Generate tests (per-symbol mode)
+  make run                 # Run latest generated tests safely
+  make api-test            # Run FastAPI backend tests
+  make coverage            # Generate coverage report
+  make clean               # Remove caches and coverage data
+
