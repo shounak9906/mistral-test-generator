@@ -65,7 +65,7 @@ Optional but recommended:
 
 ```bash
 # 1) Clone or download the project
-git clone https://github.com/shounak9906/mistral-test-generator mistral-sdk-app && cd mistral-sdk-app
+git clone https://github.com/shounak9906/mistral-test-generator mistral-test-generator && cd mistral-test-generator
 
 # 2) Create & activate a virtual environment
 python3 -m venv .venv
@@ -212,8 +212,8 @@ python cli.py run --enable
 
 This suite exercises the **running FastAPI server** (or the app via `TestClient`) and covers endpoints like:
 - `GET /health`
-- `POST /generate-and-save`
-- `POST /-generate-and-save`
+- `POST /bundle/generate-and-save`
+- `POST /bundle/generate-and-run`
 
 **Run just the API tests**:
 ```bash
